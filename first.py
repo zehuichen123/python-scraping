@@ -1,66 +1,38 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 from urllib.request import urlopen
-# from urllib.error import HTTPError,URLError
 from bs4 import BeautifulSoup
 import datetime
 import random
 import re
 
-pages=set()
 random.seed(datetime.datetime.now())
-
-# get all internalLinks in the current page
-def getInternalLinks(bsObj,includeUrl):
-	internalLinks=[]
-	for link in bsObj.findAll('a',href=re.compile('^|.*'+includeUrl+')')):
-		if link.attrs['href'] is not None:
-			if link.attrs['href'] not in internalLinks:
-				internalLinks.append(link.attrs['href'])
-	return internalLinks
-
-# get all externalLinks in the current page
-def getExternalLinks(bsObj,excludeUrl):
-	externalLinks=[]
-	for link in bsObj.findAll('a',href=re.compile('^(http|www)((?!"+excludeUrl+").)*$')):
-		if link.attrs['href'] is not None:
-			if link.attrs['href'] not in externalLinks:
-				externalLinks.append(link.attrs['href'])
-	return externalLinks
-
-def splitAddress(address):
-	addressParts=address.replace('http://','').split('/')
-	return addressParts
-
-def getRandomExternalLink(startingPage):
-	print('----')
-	html=urlopen(startingPage)
+def getLinks(articleUrl):
+	html=urlopen('http://en.wikipedia.org'+articleUrl)
 	bsObj=BeautifulSoup(html,'html.parser')
-	externalLinks=getExternalLinks(bsObj,splitAddress(startingPage)[0])
-	if len(externalLinks)==0:
-		internalLinks=getInternalLinks(startingPage)
-		return getRandomExternalLink(internalLinks[random.randint(0,len(internalLinks)-1)])
-	else:
-		return externalLinks[random.randint(0,len(externalLinks)-1)]
+	return bsObj.find('div',{'id':'bodyContent'}).findAll(
+		'a',href=re.compile('^(/wiki/)((?!:).)*$'))
 
-def followExternalLinks(startingSite):
-	externalLink=getRandomExternalLink(startingSite)
-	print('random site is '+externalLink)
-	followExternalLinks(externalLink)
+def getHistoryIPs(pageUrl):
+	pageUrl=pageUrl.replace('/wiki/','')
+	historyUrl="http://en.wikipedia.org/w/index.php?title="
+		+pageUrl+'&action=history'
+	print('history url is '+historyUrl)
+	html=urlopen(historyUrl)
+	bsObj=BeautifulSoup(html,'html.parser')
+	ipAddresses=bsObj.findAll('a',{'class':'mw-anouserlink'})
+	addressList=set()
+	for ipAddress in ipAddresses:
+		addressList.add(ipAddress.get_text())
+	return addressList
 
-followExternalLinks('http://oreilly.com')
+links=getLinks('/wiki/Python_(programming_language)')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+while(len(links)>0):
+	for link in links:
+		print('--------------------')
+		historyIPs=getHistoryIPs(link.attrs['href'])
+		for historyIP in historyIPs:
+			print(historyIP)
+		newLink=links[random.randint(0,len(links)-1)].attrs['href']
+		links=getLinks(newLink)
