@@ -5,10 +5,10 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 options=webdriver.ChromeOptions()
-options.add_argument("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36")
+options.add_argument('user-agent="Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"')
 driver = webdriver.Chrome('/Users/kirito/Documents/python/scraping/chromedriver',chrome_options=options)
 
-driver.get('https://music.163.com/#/user/home?id=136702185')
+driver.get('http://localhost:4000/')
 '''
 go_on_read=driver.find_element_by_xpath("//div[@class='flod-button']")
 '''
@@ -23,7 +23,6 @@ time.sleep(2)
 # 如果没找到标志，就说明还没到达底部，需要继续滑动，如果找到就跳出循环
 # 为了快速滑动，先设置超时时间为1秒
 driver.implicitly_wait(1)
-print(driver.page_source)
 '''
 # 不停的滑啊滑
 while True:
