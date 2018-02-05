@@ -15,10 +15,4 @@ Also, I provided some small program for python scraping like download pictures o
 3.Suggestions and Corrections
 ---
 All suggestions and corrections are warmly welcomed. If you find some mistakes or have suggestions, just open an issue in this repostitory and I will reply promptly. :)
-
-
-<span style="font-size:18px;"><span style="white-space:pre">    </span>Data={'source':None,  
-<span style="white-space:pre">        </span>'redir':'http://www.douban.com',  
-<span style="white-space:pre">        </span>'form_email':username,  
-<span style="white-space:pre">        </span>'form_password':password,  
-<span style="white-space:pre">        </span>'remember':'on'}</span> 
+ 
