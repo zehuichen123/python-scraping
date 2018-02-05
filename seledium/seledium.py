@@ -2,11 +2,14 @@
 #-*- coding:utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import time
+import os
 
 options=webdriver.ChromeOptions()
 options.add_argument('user-agent="Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"')
-driver = webdriver.Chrome('/Users/kirito/Documents/python/scraping/selenium/chromedriver',chrome_options=options)
+currentPath=os.path.abspath('.')
+currentPath=os.path.join(currentPath,'chromedriver')
+
+driver=webdriver.Chrome(currentPath,chrome_options=options)
 
 driver.get('http://localhost:4000/')
 '''
